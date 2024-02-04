@@ -474,24 +474,30 @@ def main():
         print ('No file selected for a')
         return
     
-    print('Select stats file b')
+    uniquefile = False
+    
+    print('Select stats file b (or none)')
     fb = askopenfile()
-    if (fb == ''):
-        print ('No file selected for b')
-        return
+    if (fb == None):
+        print('No file selected for b')
+        print('Working with single file (just fixing the checksum)')
+        uniquefile = True
     
     print("Combining scores")
 
     jsa = json.load(fa)
     fa.close()
 
-    jsb = json.load(fb)
-    fb.close()
+    if not uniquefile:
+        jsb = json.load(fb)
+        fb.close()
 
     dict = {}
 
     statsa = jsa['stats-change']
-    statsb = jsb['stats-change']
+    statsb = {}
+    if not uniquefile:
+        statsb = jsb['stats-change']
 
     # index the stats in file b
     for entry in statsb:
